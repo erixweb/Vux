@@ -5,7 +5,11 @@ import VuxCompile from "./compiler.mjs"
 
 createServer(async (req, res) => {
     let URL = req.url === "/" ? "index" : req.url
-    VuxCompile(URL, req, res)
+    let compiledContent = new VuxCompile().compile(URL, req, res)
+    
+    res.writeHead(200, {
+        "Content-Type": "text/html"
+    })
 
 
     readFile(`./dist/${URL}.html`, {
@@ -18,8 +22,6 @@ createServer(async (req, res) => {
             return
         }
 
-        res.writeHead(VuxCompile(URL, req, res).stateCode())
-        res.setHeader("Content-Type", "text/html")
         res.end(data)
     })
 }).listen(8080)
