@@ -5,7 +5,7 @@ import VuxCompile from "./compiler.mjs"
 
 createServer(async (req, res) => {
     let URL = req.url === "/" ? "index" : req.url
-    let compiledContent = new VuxCompile().compile(URL, req, res)
+    new VuxCompile().compile(URL, req, res)
     
     res.writeHead(200, {
         "Content-Type": "text/html"
