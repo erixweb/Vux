@@ -6,7 +6,7 @@ import {
   writeFileSync,
 } from "fs"
 
-export const VuxCompile = (file, req) => {
+export const VuxCompile = (file, req, res) => {
     if (file.endsWith(".ico")) return
 
     const item = file
@@ -23,6 +23,7 @@ export const VuxCompile = (file, req) => {
     let compiled = ""
     let serverArgs = ""
     let serverMode = false
+    export let statusCode = ""
 
     content.split("\n").forEach((line) => {
         if (line.trim().startsWith("<script is:server>"))
@@ -31,8 +32,16 @@ export const VuxCompile = (file, req) => {
         return (serverMode = false)
 
         if (serverMode) {
-        line = line.replaceAll("Vux.headers", "req")
-        serverArgs = `${serverArgs}${line}`
+            line = line.replaceAll("Vux.headers", "req")
+            if (line.includes("Vux.redirect")) {
+                console.log(line.split('"'))
+                const toRedirect = line.split('"')[1]
+                line = line.replaceAll("Vux.redirect", `res.writeHead(302, {'Location': '${toRedirect}'}); res.end`)
+
+                statusCode = `res.writeHead(302, {'Location': '${toRedirect}'}); res.end`
+            }
+
+            serverArgs = `${serverArgs}${line}`
         }
 
         if (serverMode) return
@@ -42,12 +51,15 @@ export const VuxCompile = (file, req) => {
     })
 
     writeFileSync(`dist/${item}.html`, compiled, (err) => {
+
         if (err) throw err
 
         console.log("Saved")
     })
+    if (statusCode === "") statusCode = 200
 
     eval(serverArgs)
+    
 }
 
 export default VuxCompile

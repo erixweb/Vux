@@ -4,9 +4,8 @@ import VuxCompile from "./compiler.mjs"
 
 
 createServer(async (req, res) => {
-
     let URL = req.url === "/" ? "index" : req.url
-    VuxCompile(URL, req)
+    VuxCompile(URL, req, res)
 
 
     readFile(`./dist/${URL}.html`, {
@@ -18,8 +17,9 @@ createServer(async (req, res) => {
             res.end("Internal Server Error")
             return
         }
+
+        res.writeHead(VuxCompile(URL, req, res).stateCode())
         res.setHeader("Content-Type", "text/html")
-        res.writeHead(200)
         res.end(data)
     })
 }).listen(8080)
