@@ -1,27 +1,32 @@
-import { createServer } from "http"
 import { readFile } from "fs"
+import express from "express"
 import VuxCompile from "./compiler.mjs"
 
-
-createServer(async (req, res) => {
+express()
+  .get("*", async (req, res) => {
+    let startingTime = Date.now();
     let URL = req.url === "/" ? "index" : req.url
     new VuxCompile().compile(URL, req, res)
-    
+
     res.writeHead(200, {
-        "Content-Type": "text/html"
-    })
+      "Content-Type": "text/html",
+    });
 
-
-    readFile(`./dist/${URL}.html`, {
+    readFile(
+      `./dist/${URL}.html`,
+      {
         flag: "r",
-        encoding: "utf-8"
-    }, (err, data) => {
+        encoding: "utf-8",
+      },
+      (err, data) => {
         if (err) {
-            res.writeHead(500)
-            res.end("Internal Server Error")
-            return
+          res.writeHead(404)
+          res.end("Not Found")
+          return;
         }
 
         res.end(data)
-    })
-}).listen(8080)
+      }
+    )
+    console.log(`Took ${Date.now() - startingTime}ms to execute`)
+  }).listen("8080")
