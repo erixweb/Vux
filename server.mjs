@@ -4,7 +4,6 @@ import VuxCompile from "./compiler.mjs"
 
 express()
   .get("*", async (req, res) => {
-    let startingTime = Date.now();
     let URL = req.url === "/" ? "index" : req.url
     new VuxCompile().compile(URL, req, res)
 
@@ -28,5 +27,4 @@ express()
         res.end(data)
       }
     )
-    console.log(`Took ${Date.now() - startingTime}ms to execute`)
   }).listen("8080")
