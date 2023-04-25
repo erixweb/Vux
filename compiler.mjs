@@ -13,6 +13,7 @@ export class VuxCompile {
         if (file.endsWith(".ico")) return
 
         const item = file
+        let lineNumber = 0, compiled = "", serverArgs = "", serverMode = false
     
         if (!existsSync(`./src/pages/${item}.html`)) return null
     
@@ -20,12 +21,6 @@ export class VuxCompile {
             flag: "r",
             encoding: "utf-8",
         })
-    
-        let lineNumber = 0
-    
-        let compiled = ""
-        let serverArgs = ""
-        let serverMode = false
     
         content.split("\n").forEach((line) => {
             if (line.trim().startsWith("<script is:server>"))
