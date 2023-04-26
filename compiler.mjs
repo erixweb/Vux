@@ -11,7 +11,7 @@ export class VuxCompile {
     compile (file, req, res) {
         if (file.endsWith(".ico")) return
         const item = file
-        let lineNumber = 0, compiled = "", serverArgs = "", serverMode = false, components = []
+        let compiled = "", serverArgs = "", serverMode = false, components = []
     
         if (!existsSync(`./src/pages/${item}.html`)) return null
 
@@ -60,8 +60,6 @@ export class VuxCompile {
 
 
             compiled = `${compiled}${line}`
-
-            lineNumber++
         }
 
 
