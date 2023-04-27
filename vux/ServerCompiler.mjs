@@ -34,8 +34,6 @@ export class ServerCompile {
         if (!this.redirected) {
             serverArgs = `${serverArgs};res.writeHead(200, {'Content-Type': 'text/html'});`
         }
-
-        console.log(serverArgs)
         eval(serverArgs)
 
     }
