@@ -10,10 +10,26 @@ export class VuxCompile {
 
     compile(file, req, res) {
         if (file.endsWith(".ico")) return
+        let compiled = "", serverArgs = "", serverMode = false, components = []
+
+        if (file.endsWith(".js")) {
+            compiled = readFileSync(`./src/pages/scripts/${file}`, {
+                flag: "r",
+                encoding: "utf-8",
+            })
+
+            writeFileSync(`dist/${file}`, compiled, (err) => {
+
+                if (err) throw err
+    
+                console.log("Compiled")
+            })
+
+            return
+        }
 
         const item = file
 
-        let compiled = "", serverArgs = "", serverMode = false, components = []
 
         if (!existsSync(`./src/pages/${item}.html`)) return null
 
