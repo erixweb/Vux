@@ -1,7 +1,19 @@
-import HTMLCompiler from "./vux/HTMLCompiler.mjs";
-import { ServerCompile } from "./vux/ServerCompilers.mjs";
+import express from "express"
+import { HTMLCompiler } from "./vux/HTMLCompiler.mjs";
+import { ServerCompile } from "./vux/ServerCompiler.mjs";
 
-let HTMLCompile = new HTMLCompiler()
 
-HTMLCompile.compile("index.html", "E", "E")
-new ServerCompile().compile(HTMLCompile.content, "e", "E")
+express()
+    .get("*", async (req, res) => {
+        let URL
+        URL = req.url === "/" ? URL = "index" : URL = req.url.replace("/", "")
+
+        let HTMLCompile = new HTMLCompiler(), ServerCompiler = new ServerCompile()
+
+        HTMLCompile.compile(URL+".html")
+
+        ServerCompiler.compile(HTMLCompile.content, req, res)
+
+        res.end(HTMLCompile.content)
+
+    }).listen(8080)

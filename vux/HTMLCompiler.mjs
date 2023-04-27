@@ -1,5 +1,4 @@
 import {
-    readdirSync,
     existsSync,
     readFileSync,
     writeFileSync,
@@ -30,9 +29,8 @@ export class HTMLCompiler {
             content = content.replace("undefined", "")
         }
 
-
         writeFileSync(`dist/${file}`, this.content, (e) => {
-            if (e) throw new e
+            if (e) console.log(e)
         })
 
         return HTMLCompiler
