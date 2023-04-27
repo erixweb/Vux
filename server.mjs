@@ -9,7 +9,7 @@ express()
 
     res.writeHead(200, {
       "Content-Type": "text/html",
-    });
+    })
 
     readFile(
       `./dist/${URL}.html`,

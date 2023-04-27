@@ -1,19 +1,22 @@
 import {
-  readdirSync,
-  existsSync,
-  readFileSync,
-  writeFileSync,
+    readdirSync,
+    existsSync,
+    readFileSync,
+    writeFileSync,
 } from "fs"
 
 export class VuxCompile {
     status = null
 
-    compile (file, req, res) {
+    compile(file, req, res) {
         if (file.endsWith(".ico")) return
+
         const item = file
+
         let compiled = "", serverArgs = "", serverMode = false, components = []
-    
+
         if (!existsSync(`./src/pages/${item}.html`)) return null
+
 
         const getComponents = () => {
             let files = readdirSync("src/components/")
@@ -35,33 +38,32 @@ export class VuxCompile {
             flag: "r",
             encoding: "utf-8",
         })
-    
+
         for (let i = 0; i < content.split("\n").length; i++) {
             let line = content.split("\n")[i]
 
-            if (line.trim().startsWith("<script is:server>"))
-            return (serverMode = true)
-            if (line.trim().startsWith("</script>") && serverMode)
-            return (serverMode = false)
-    
+            if (line.trim().startsWith("<script is:server>")) {
+                line = ""
+                serverMode = true
+            }
+            if (line.trim().startsWith("</script>") && serverMode) {
+                line = ""
+                serverMode = false
+            }
             if (serverMode) {
                 line = line.replaceAll("Vux.headers", "req")
                 if (line.includes("Vux.redirect")) {
                     const toRedirect = line.split('"')[1]
                     line = line.replaceAll("Vux.redirect", `res.writeHead(302, {'Location': '${toRedirect}'}); res.end`)
-    
+
                     this.status = `res.writeHead(302, {'Location': '${toRedirect}'}); res.end`
                 }
-    
                 serverArgs = `${serverArgs}${line}`
             }
-    
-            if (serverMode) return
-
-
-            compiled = `${compiled}${line}`
+            if (!serverMode) {
+                compiled = `${compiled}${line}`
+            }
         }
-
 
         for (let i = 0; i < components.length; i++) {
             let splitted = components[i].split(":")
@@ -71,16 +73,16 @@ export class VuxCompile {
         }
 
         writeFileSync(`dist/${item}.html`, compiled, (err) => {
-    
+
             if (err) throw err
-    
-            console.log("Saved")
+
+            console.log("Compiled")
         })
-        
+
         this.status = `res.writeHead(200, {'Content-Type': 'text/html'});`
-    
+
         eval(serverArgs)
-        
+
 
         return VuxCompile
     }
