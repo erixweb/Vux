@@ -1,10 +1,12 @@
 export class ServerCompile {
     serverMode = false
     redirected = false
+    html = ``
 
     compile (content, req, res) {
         let line, serverArgs = ""
         content = content.split("\n")
+        let HTML = content
 
         for (let i = 0; i < content.length; i++) {
             line = content[i]
@@ -29,6 +31,8 @@ export class ServerCompile {
                 }
 
                 serverArgs = `${serverArgs}${line}`
+            } else {
+                this.html = `${this.html}${line}`
             }
         }
         if (!this.redirected) {

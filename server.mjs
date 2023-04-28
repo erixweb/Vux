@@ -1,6 +1,7 @@
 import express from "express"
 import { HTMLCompiler } from "./vux/HTMLCompiler.mjs";
 import { ServerCompile } from "./vux/ServerCompiler.mjs";
+import { JsCompile } from "./vux/JsCompiler.mjs";
 
 
 express()
@@ -8,12 +9,21 @@ express()
         let URL
         URL = req.url === "/" ? URL = "index" : URL = req.url.replace("/", "")
 
+        if (URL.endsWith(".js")) {
+            let compileJs = new JsCompile()
+            compileJs.compile(URL)
+
+
+            res.end(compileJs.content)
+
+            return
+        }
+
         let HTMLCompile = new HTMLCompiler(), ServerCompiler = new ServerCompile()
 
         HTMLCompile.compile(URL+".html")
 
         ServerCompiler.compile(HTMLCompile.content, req, res)
-
-        res.end(HTMLCompile.content)
+        res.end(ServerCompiler.html)
 
     }).listen(8080)
