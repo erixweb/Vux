@@ -1,51 +1,19 @@
-import { readFile } from "fs"
 import express from "express"
-import VuxCompile from "./vux/HTMLCompiler.mjs"
+import { HTMLCompiler } from "./vux/HTMLCompiler.mjs";
+import { ServerCompile } from "./vux/ServerCompiler.mjs";
+
 
 express()
-  .get("*", async (req, res) => {
-    let URL = req.url === "/" ? "index" : req.url
-    new HTMLCompile().compile(URL, req, res)
+    .get("*", async (req, res) => {
+        let URL
+        URL = req.url === "/" ? URL = "index" : URL = req.url.replace("/", "")
 
-    res.writeHead(200, {
-      "Content-Type": "text/html",
-    })
+        let HTMLCompile = new HTMLCompiler(), ServerCompiler = new ServerCompile()
 
-    if (URL.endsWith(".js")) {
-      readFile(
-        `./dist/${URL}`,
-        {
-          flag: "r",
-          encoding: "utf-8",
-        },
-        (err, data) => {
-          if (err) {
-            res.writeHead(404)
-            res.end("Not Found")
-            return;
-          }
-  
-          res.end(data)
-        }
-      )
+        HTMLCompile.compile(URL+".html")
 
-      return
-    }
+        ServerCompiler.compile(HTMLCompile.content, req, res)
 
-    readFile(
-      `./dist/${URL}.html`,
-      {
-        flag: "r",
-        encoding: "utf-8",
-      },
-      (err, data) => {
-        if (err) {
-          res.writeHead(404)
-          res.end("Not Found")
-          return;
-        }
+        res.end(HTMLCompile.content)
 
-        res.end(data)
-      }
-    )
-  }).listen("8080")
+    }).listen(8080)
