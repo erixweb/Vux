@@ -2,12 +2,14 @@ import {
     existsSync,
     readFileSync,
     writeFileSync,
+    readdirSync
 } from "fs"
 
 export class HTMLCompiler {
     status = null
     serverArgs = ""
     content = ""
+    components = []
 
     compile(file) {
         if (!existsSync(`./src/pages/${file}`)) return null
@@ -26,7 +28,25 @@ export class HTMLCompiler {
         }
 
         if (this.content.startsWith("undefined")) {
-            content = content.replace("undefined", "")
+            this.content = content.replace("undefined", "")
+        }
+
+        for (let i = 0; i < readdirSync("src/components").length; i++) {
+            const item = readdirSync("src/components")[i]
+
+            let inner = readFileSync(`./src/components/${item}`, {
+                flag: "r",
+                encoding: "utf-8",
+            })
+
+            this.components.push(`${item}: ${inner}`)
+        }
+
+        for (let i = 0; i < this.components.length; i++) {
+            let splitted = this.components[i].split(":")
+
+            this.content = this.content.replaceAll(`<${splitted[0].replace(".html", "")}>`, `${splitted[1]}`)
+            this.content = this.content.replaceAll(`<${splitted[0].replace(".html", "")} />`, `${splitted[1]}`)
         }
 
         writeFileSync(`dist/${file}`, this.content, (e) => {
