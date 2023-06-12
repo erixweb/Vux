@@ -3,7 +3,8 @@ import {
     readFileSync,
     writeFileSync,
     readdirSync
-} from "fs"
+} from "node:fs"
+import { readFile } from "node:fs/promises"
 
 export class HTMLCompiler {
     status = null
@@ -13,7 +14,7 @@ export class HTMLCompiler {
 
     compile(file) {
         if (!existsSync(`./src/pages/${file}`)) return null
-        let read, line = ""
+        let read, compContent, line = ""
 
         // Write to dist
         read = readFileSync(`./src/pages/${file}`, {
@@ -32,6 +33,8 @@ export class HTMLCompiler {
         }
 
         for (let i = 0; i < readdirSync("src/components").length; i++) {
+            compContent = ""
+
             const item = readdirSync("src/components")[i]
 
             let inner = readFileSync(`./src/components/${item}`, {
@@ -39,14 +42,23 @@ export class HTMLCompiler {
                 encoding: "utf-8",
             })
 
-            this.components.push(`${item}: ${inner}`)
+            for (let k = 0; k < inner.length; k++) {
+                compContent = `${compContent}${inner[k]}`
+            }
+            this.components.push({
+                name: item,
+                content: compContent
+            })
         }
 
-        for (let i = 0; i < this.components.length; i++) {
-            let splitted = this.components[i].split(":")
 
-            this.content = this.content.replaceAll(`<${splitted[0].replace(".html", "")}>`, `${splitted[1]}`)
-            this.content = this.content.replaceAll(`<${splitted[0].replace(".html", "")} />`, `${splitted[1]}`)
+        for (let i = 0; i < this.components.length; i++) {
+            const name = this.components[i]["name"]
+            const content = this.components[i]["content"]
+
+            
+            this.content = this.content.replaceAll(`<${name.replace(".jsx", "")}>`, `${content}`)
+            this.content = this.content.replaceAll(`<${name.replace(".jsx", "")} />`, `${content}`)
         }
 
         writeFileSync(`dist/${file}`, this.content, (e) => {

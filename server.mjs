@@ -9,7 +9,7 @@ express()
         let URL
         URL = req.url === "/" ? URL = "index" : URL = req.url.replace("/", "")
 
-        if (URL.endsWith(".js")) {
+        if (URL.endsWith(".js") || URL.endsWith(".css")) {
             let compileJs = new JsCompile()
             compileJs.compile(URL)
 
@@ -21,7 +21,9 @@ express()
 
         let HTMLCompile = new HTMLCompiler(), ServerCompiler = new ServerCompile()
 
-        HTMLCompile.compile(URL+".html")
+        HTMLCompile.compile(URL+".jsx")
+        HTMLCompile.content = HTMLCompile.content.replace("<>", "")
+        HTMLCompile.content = HTMLCompile.content.replace("</>", "")
 
         ServerCompiler.compile(HTMLCompile.content, req, res)
         res.end(ServerCompiler.html)

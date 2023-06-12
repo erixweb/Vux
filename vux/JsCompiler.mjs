@@ -1,7 +1,7 @@
 import {
     readFileSync,
     existsSync
-} from "fs"
+} from "node:fs"
 
 export class JsCompile {
     content = ""
