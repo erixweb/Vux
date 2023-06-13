@@ -11,10 +11,10 @@ export class ServerCompile {
         for (let i = 0; i < content.length; i++) {
             line = content[i]
 
-            if (line.startsWith("<script only:server>") && !this.serverMode) {
+            if (line.trim().startsWith("<script only:server>") && !this.serverMode) {
                 this.serverMode = true
                 line = ""
-            } else if (line.startsWith("</script>") && this.serverMode) {
+            } else if (line.trim().startsWith("</script>") && this.serverMode) {
                 this.serverMode = false
                 line = ""
             }

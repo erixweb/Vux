@@ -11,29 +11,12 @@ const app = express()
         URL = req.url === "/" ? URL = "index" : URL = req.url.replace("/", "")
 
         if (URL.endsWith(".js") || URL.endsWith(".css")) {
+            res.writeHead(200, {'Content-Type': 'application/javascript'})
             let compileJs = new JsCompile()
             compileJs.compile(URL)
 
 
             res.end(compileJs.content)
-
-            return
-        } else if (URL.endsWith(".mjs")) {
-            res.writeHead(200, {'Content-Type': 'aplication/javascript'})
-            const file = `src/pages/${URL}`
-            let content, line = ""
-            let read = readFileSync(`${file}`, {
-                flag: "r",
-                encoding: "utf-8",
-            })
-    
-            for (let i = 0; i < read.length; i++) {
-                line = read[i]
-    
-                content += line
-            }
-            content = content.replace("undefined", "")
-            res.end(content)
 
             return
         }

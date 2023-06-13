@@ -9,11 +9,14 @@
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <title>Vux Compile</title>
             <link rel="stylesheet" href="styles.css" />
-            <script src="main.mjs" type="module" defer></script>
+            <script src="main.js" type="module" defer></script>
         </head>
         <body>
             <Header />
             <main>
+                <button>
+                    Click me
+                </button>
             </main>
         </body>
     </html>

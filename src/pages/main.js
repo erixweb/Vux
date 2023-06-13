@@ -6,6 +6,6 @@ useEffect(() => {
   console.log("Clicks have changed")  
 }, clicks)
 
-document.querySelector("button").addEventListener(() => {
+document.querySelector("button").addEventListener("click", () => {
     clicks.value += 1
 })
