@@ -1,0 +1,1 @@
+export const createState=t=>({aInternal:t,aListener:function(t){},set value(val){this.aInternal=val,this.aListener(val)},get value(){return this.aInternal},listen:function(t){this.aListener=t}});export const useEffect=(e,t)=>{if(t)return t.listen(e)};export default [useEffect, createState];

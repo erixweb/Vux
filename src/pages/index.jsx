@@ -2,7 +2,6 @@
     <script only:server>
         console.log("Fetched main page")
     </script>
-
     <html lang="en">
         <head>
             <meta charset="UTF-8" />
@@ -10,14 +9,11 @@
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <title>Vux Compile</title>
             <link rel="stylesheet" href="styles.css" />
-            <script src="index.js"></script>
+            <script src="main.mjs" type="module" defer></script>
         </head>
         <body>
             <Header />
             <main>
-                <script only:server>
-                    console.log("Succesfully rendered main element")
-                </script>
             </main>
         </body>
     </html>
