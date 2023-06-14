@@ -51,7 +51,6 @@ export class HTMLCompiler {
             })
         }
 
-
         for (let i = 0; i < this.components.length; i++) {
             const name = this.components[i]["name"]
             const content = this.components[i]["content"]

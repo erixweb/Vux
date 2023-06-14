@@ -1,6 +1,6 @@
 <>
     <script only:server>
-        console.log("Fetched main page")
+        console.log("requested index.js")
     </script>
     <html lang="en">
         <head>
@@ -14,9 +14,7 @@
         <body>
             <Header />
             <main>
-                <button>
-                    Click me
-                </button>
+                <Counter />
             </main>
         </body>
     </html>
