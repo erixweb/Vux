@@ -1,6 +1,6 @@
 <>
     <script only:server>
-        console.log("requested index.js")
+        console.log("rendered index.js")
     </script>
     <html lang="en">
         <head>
