@@ -56,8 +56,8 @@ export class HTMLCompiler {
             const content = this.components[i]["content"]
 
             
-            this.content = this.content.replaceAll(`<${name.replace(".jsx", "")}>`, `${content}`)
-            this.content = this.content.replaceAll(`<${name.replace(".jsx", "")} />`, `${content}`)
+            this.content = this.content.replaceAll(`<${name.replace(".html", "")}>`, `${content}`)
+            this.content = this.content.replaceAll(`<${name.replace(".html", "")} />`, `${content}`)
         }
 
         writeFileSync(`dist/${file}`, this.content, (e) => {

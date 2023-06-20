@@ -23,7 +23,7 @@ const app = express()
 
         let HTMLCompile = new HTMLCompiler(), ServerCompiler = new ServerCompile()
 
-        HTMLCompile.compile(URL+".jsx")
+        HTMLCompile.compile(URL+".html")
         HTMLCompile.content = HTMLCompile.content.replace("<>", "")
         HTMLCompile.content = HTMLCompile.content.replace("</>", "")
 
