@@ -40,6 +40,12 @@ export class ServerCompile {
                 serverArgs = `${serverArgs};res.writeHead(200, {'Content-Type': 'text/html'});`
             }
             eval(serverArgs)
+        } else {
+            for (let i = 0; i < content.length; i++) {
+                line = content[i]
+
+                this.html = `${this.html}${line}`
+            }
         }
     }
 }
